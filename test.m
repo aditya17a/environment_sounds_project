@@ -1,0 +1,15 @@
+function test(address,file_list,num_deltas)
+% file_list is the list of all files inside the folder specified in the
+% address.
+N = length(file_list);
+addpath('gmms')
+
+
+for i=1:N
+    mfcc_features = get_mfcc_data(address,file_list,num_deltas); %Size: 
+    % timeframes x features_with_deltas(13, 26, 39 etc.)
+    
+end
+
+
+end

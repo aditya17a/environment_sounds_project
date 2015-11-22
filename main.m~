@@ -1,0 +1,55 @@
+addpath(genpath('mfcc'));
+directory = 'ESC-10';
+dir_list = generate_dir_list(directory);
+num_classes = length(dir_list);
+%% Flags
+mfcc_flag = false
+train_flag = false
+test_flag = true
+%% Initialize parameters
+num_deltas = 1;
+number_of_gaussians = 8;
+
+%% Generate MFCC features
+if mfcc_flag    
+    mfcc_features = cell(num_classes,1);    
+    for i=1:num_classes
+        
+        file_list = dir(strcat(directory,'/',dir_list{i},'/*.ogg'));
+        
+        for j=1:length(file_list)
+        file_names{j} = file_list(j).name;
+        end
+        
+        address = strcat(directory, '/', dir_list{i});
+        mfcc_features{i,1} = get_mfcc_data(address, file_names, num_deltas);
+    end
+end
+
+%% Fit GMMs
+if train_flag
+    for class=1:num_classes
+        class
+    % Use k-means to initialize 
+     X = mfcc_features{class,1}';
+     S = initialize_with_kmeans(X,number_of_gaussians);
+
+    % Create GMMs
+    display('fitting...')
+    obj = fitgmdist(X,number_of_gaussians,'Start',S,'Options',statset('Display','final','MaxIter',200,'TolFun',1e-6));
+    eval(['gmm_' num2str(class) '= obj']);
+    save(strcat('gmm_',num2str(class)),strcat('gmm_',num2str(class)));
+    end
+end
+
+%% Test 
+if test_flag
+    for i=1:num_classes
+        file_list = dir(strcat(directory,'/',dir_list{i},'/*.ogg'));
+        for j=1:length(file_list)
+            file_names{j} = file_list(j).name;
+        end
+    address = strcat(directory, '/', dir_list{i});
+    prob_output{i,1} = test(address,file_list,num_deltas); %Size = N*
+    end
+end
