@@ -1,13 +1,13 @@
 addpath(genpath('mfcc'));
-directory = 'ESC-10';
+directory = 'ESC-50';
 dir_list = generate_dir_list(directory);
 num_classes = length(dir_list);
 %% Flags
-mfcc_flag = false
-train_flag = false
+mfcc_flag = true
+train_flag = true
 test_flag = true
 %% Initialize parameters
-num_deltas = 1;
+num_deltas = 2;
 number_of_gaussians = 8;
 
 %% Generate MFCC features
@@ -38,7 +38,7 @@ if train_flag
     display('fitting...')
     obj = fitgmdist(X,number_of_gaussians,'Start',S,'Options',statset('Display','final','MaxIter',200,'TolFun',1e-6));
     eval(['gmm_' num2str(class) '= obj']);
-    save(strcat('gmms/gmm_',num2str(class)),strcat('gmm_',num2str(class)));
+    save(strcat('gmms_50/gmm_',num2str(class)),strcat('gmm_',num2str(class)));
     end
 end
 

@@ -5,8 +5,8 @@ function prob_output = test(address,file_list,num_deltas)
 
 N = length(file_list);
 %% Load GMMs
-addpath('gmms');
-gmm_list = dir('gmms/*.mat');
+addpath('gmms_50');
+gmm_list = dir('gmms_50/*.mat');
 for i=1:length(gmm_list)
     gmm_name = gmm_list(i).name;
     load(gmm_name);
