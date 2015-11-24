@@ -20,7 +20,7 @@ function [mfcc_concatenated] = get_mfcc_data(address, fileList, numDeltas)
     mfcc_concatenated=[];
     for i = 1:length(fileList)
         file_path = strcat(address,'/',fileList{i});
-        i
+        %i
         [s,fs] = audioread(file_path);
         s = mean(s,2);
         [ MFCCs, ~, ~ ] = ...

@@ -43,13 +43,20 @@ if train_flag
 end
 
 %% Test 
+count = 0;
+num_samples = 0;
 if test_flag
-    for i=1:num_classes
+    for i=1:length(dir_list)
         file_list = dir(strcat(directory,'/',dir_list{i},'/*.ogg'));
         for j=1:length(file_list)
             file_names{j} = file_list(j).name;
         end
+        num_samples = num_samples + numel(file_names);
     address = strcat(directory, '/', dir_list{i});
-    prob_output{i,1} = test(address,file_list,num_deltas); %Size = N*num_classes
+    prob_output{i,1} = test(address,file_names,num_deltas); %Size = N*num_classes
+    [~, I]=min(prob_output{i,1},[],2);
+    c = numel(find(I == i));
+    count = count + c;
     end
+    accuracy = count/num_samples
 end
